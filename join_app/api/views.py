@@ -1,8 +1,8 @@
 from rest_framework import viewsets
 from rest_framework.views import APIView
 from rest_framework.response import Response
-from join_app.api.serializers import UserSerializer, TaskSerializer, SubTaskSerializer
-from join_app.models import Subtask, Task, User
+from join_app.api.serializers import UserSerializer, TaskSerializer, SubTaskSerializer, ContactSerializer
+from join_app.models import Subtask, Task, User, Contact
 from django.utils import timezone
 
 class UserViewSet(viewsets.ModelViewSet):
@@ -38,3 +38,7 @@ class SummaryView(APIView):
         }
 
         return Response(data)
+    
+class ContactViewSet(viewsets.ModelViewSet):
+    queryset = Contact.objects.all()
+    serializer_class = ContactSerializer

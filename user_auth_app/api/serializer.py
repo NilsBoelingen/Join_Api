@@ -1,6 +1,8 @@
 from rest_framework import serializers
 from user_auth_app.models import UserProfile
 from django.contrib.auth.models import User
+from django.db import transaction
+from join_app.models import JoinUser
 
 class UserProfileSerializer(serializers.ModelSerializer):
     class Meta:
@@ -19,6 +21,7 @@ class RegistrationSerializer(serializers.ModelSerializer):
             }
         }
 
+    @transaction.atomic
     def save(self):
         pw = self.validated_data['password']
         repeated_pw = self.validated_data['repeated_password']
@@ -32,4 +35,8 @@ class RegistrationSerializer(serializers.ModelSerializer):
         account = User(email=self.validated_data['email'], username=self.validated_data['username'])
         account.set_password(pw)
         account.save()
+
+        UserProfile.objects.create(user=account)
+        JoinUser.objects.create(user=account)
+
         return account

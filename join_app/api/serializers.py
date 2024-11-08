@@ -1,5 +1,5 @@
 from rest_framework import serializers
-from join_app.models import Subtask, Task, User
+from join_app.models import Subtask, Task, User, Contact
 
 class UserSerializer(serializers.ModelSerializer):
     class Meta:
@@ -47,3 +47,8 @@ class TaskSerializer(serializers.ModelSerializer):
             Subtask.objects.create(task=instance, **subtask_data)
         
         return instance
+    
+class ContactSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = Contact
+        fields = '__all__'

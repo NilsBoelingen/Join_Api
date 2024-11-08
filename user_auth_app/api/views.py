@@ -38,7 +38,8 @@ class CustomLoginView(ObtainAuthToken):
         data = {
             'token': token.key,
             'username': user.username,
-            'email': user.email
+            'email': user.email,
+            'id': user.id
         }
         return Response(data, status=status.HTTP_202_ACCEPTED)
 
@@ -71,7 +72,8 @@ class RegistrationView(APIView):
             data = {
                 'token': token.key,
                 'username': saved_account.username,
-                'email': saved_account.email
+                'email': saved_account.email,
+                'id': saved_account.id
             }
             return Response(data, status=status.HTTP_201_CREATED)
         else:

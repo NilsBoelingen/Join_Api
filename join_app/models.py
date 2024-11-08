@@ -3,10 +3,11 @@ from django.contrib.auth.models import User
 
 # Create your models here.
 
-class User(models.Model):
+class JoinUser(models.Model):
     user = models.OneToOneField(User, on_delete=models.CASCADE)
     joined_date = models.DateField(auto_now_add=True)
-    telefone = models.CharField(max_length=50)
+    telefone = models.IntegerField(blank=True, null=True)
+    icon = models.CharField(max_length=10, blank=True, null=True)
 
     def __str__(self):
         return self.user.username
@@ -30,3 +31,13 @@ class Subtask(models.Model):
 
     def __str__(self):
         return self.titel
+    
+class Contact(models.Model):
+    firstname = models.CharField(max_length=100)
+    lastname = models.CharField(max_length=100)
+    email = models.EmailField()
+    phonenumber = models.IntegerField()
+    icon = models.CharField(max_length=10)
+
+    def __str__(self):
+        return f"{self.firstname} {self.lastname}"
