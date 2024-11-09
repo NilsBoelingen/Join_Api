@@ -26,6 +26,8 @@ class SummaryView(APIView):
         urgent_count = Task.objects.filter(priority='urgent').count()
         overdue_count = Task.objects.exclude(position='done').filter(due_date__gte=timezone.now().date()).count()
         total_count = Task.objects.all().count()
+        next_task = Task.objects.filter(due_date__gte=timezone.now().date()).exclude(position='done').order_by('due_date').first()
+        next_deadline = next_task.due_date if next_task else 'None'
 
         data = {
             'todo_count': todo_count,
@@ -34,7 +36,8 @@ class SummaryView(APIView):
             'feedback_count': feedback_count,
             'urgent_count': urgent_count,
             'overdue_count': overdue_count,
-            'total_count': total_count
+            'total_count': total_count,
+            'next_deadline': next_deadline
         }
 
         return Response(data)

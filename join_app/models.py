@@ -12,11 +12,21 @@ class JoinUser(models.Model):
     def __str__(self):
         return self.user.username
     
+class Contact(models.Model):
+    firstname = models.CharField(max_length=100)
+    lastname = models.CharField(max_length=100)
+    email = models.EmailField()
+    phonenumber = models.IntegerField()
+    icon = models.CharField(max_length=10)
+
+    def __str__(self):
+        return f"{self.firstname} {self.lastname}"
+    
 class Task(models.Model):
     titel = models.CharField(max_length=200)
     description = models.TextField()
     due_date = models.DateField()
-    users = models.ManyToManyField(User, related_name='assignees')
+    users = models.ManyToManyField(Contact, related_name='assignees')
     priority = models.CharField(max_length=50)
     category = models.CharField(max_length=100)
     position = models.CharField(max_length=100)
@@ -32,12 +42,3 @@ class Subtask(models.Model):
     def __str__(self):
         return self.titel
     
-class Contact(models.Model):
-    firstname = models.CharField(max_length=100)
-    lastname = models.CharField(max_length=100)
-    email = models.EmailField()
-    phonenumber = models.IntegerField()
-    icon = models.CharField(max_length=10)
-
-    def __str__(self):
-        return f"{self.firstname} {self.lastname}"
