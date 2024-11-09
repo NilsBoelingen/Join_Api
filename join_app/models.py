@@ -15,8 +15,8 @@ class JoinUser(models.Model):
 class Contact(models.Model):
     firstname = models.CharField(max_length=100)
     lastname = models.CharField(max_length=100)
-    email = models.EmailField()
-    phonenumber = models.IntegerField()
+    email = models.EmailField(blank=True, null=True)
+    phonenumber = models.CharField(max_length=50, blank=True, null=True)
     icon = models.CharField(max_length=10)
 
     def __str__(self):
