@@ -44,22 +44,6 @@ class CustomLoginView(ObtainAuthToken):
         }
         return Response(data, status=status.HTTP_202_ACCEPTED)
 
-        # serializer = self.serializer_class(data=request.data)
-        # data = {}
-
-        # if serializer.is_valid():
-        #     user = serializer.validated_data['user']
-        #     token, created = Token.objects.get_or_create(user=user)
-        #     data = {
-        #         'token': token.key,
-        #         'username': user.username,
-        #         'email': user.email
-        #     }
-        #     return Response(data, status=status.HTTP_202_ACCEPTED)
-        # else:
-        #     data = serializer.errors
-        #     return Response(data, status=status.HTTP_400_BAD_REQUEST)
-
 class RegistrationView(APIView):
     permission_classes = [AllowAny]
 
