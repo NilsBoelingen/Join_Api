@@ -7,7 +7,7 @@ from join_app.models import JoinUser
 class UserProfileSerializer(serializers.ModelSerializer):
     class Meta:
         model = UserProfile
-        fields = ['user', 'bio', 'location']
+        fields = ['user', 'telefone']
 
 class RegistrationSerializer(serializers.ModelSerializer):
     repeated_password = serializers.CharField(write_only=True)

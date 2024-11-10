@@ -13,11 +13,12 @@ class JoinUser(models.Model):
         return self.user.username
     
 class Contact(models.Model):
-    firstname = models.CharField(max_length=100)
-    lastname = models.CharField(max_length=100)
+    firstname = models.CharField(max_length=100, blank=True, null=True)
+    lastname = models.CharField(max_length=100, blank=True, null=True)
     email = models.EmailField(blank=True, null=True)
     phonenumber = models.CharField(max_length=50, blank=True, null=True)
     icon = models.CharField(max_length=10)
+    user = models.BooleanField(default=False)
 
     def __str__(self):
         return f"{self.firstname} {self.lastname}"

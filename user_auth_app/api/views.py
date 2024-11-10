@@ -9,6 +9,7 @@ from django.contrib.auth.models import User
 from django.contrib.auth import authenticate
 from user_auth_app.models import UserProfile
 from .serializer import UserProfileSerializer, RegistrationSerializer
+from join_app.api.serializers import UserSerializer
 
 class UserProfileList(generics.ListCreateAPIView):
     queryset = UserProfile.objects.all()
@@ -79,3 +80,16 @@ class RegistrationView(APIView):
         else:
             data = serializer.errors
             return Response(data, status=status.HTTP_400_BAD_REQUEST)
+        
+class UserFromTokenView(APIView):
+    def post(self, request):
+        token = request.data.get('token')
+        if token:
+            try:
+                user = User.objects.get(auth_token=token)
+                serializer = UserSerializer(user)
+                id = serializer.data['id']
+                return Response(id, status=status.HTTP_202_ACCEPTED)
+            except User.DoesNotExist:
+                pass
+        return Response({'error': 'Token is not valid.'}, status=status.HTTP_403_FORBIDDEN)
