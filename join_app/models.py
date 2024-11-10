@@ -25,10 +25,10 @@ class Contact(models.Model):
     
 class Task(models.Model):
     titel = models.CharField(max_length=200)
-    description = models.TextField()
-    due_date = models.DateField()
-    users = models.ManyToManyField(Contact, related_name='assignees')
-    priority = models.CharField(max_length=50)
+    task = models.TextField(blank=True, null=True)
+    date = models.DateField()
+    assignedTo = models.ManyToManyField(Contact, related_name='assignedTo', blank=True)
+    urgency = models.CharField(max_length=50, blank=True, null=True)
     category = models.CharField(max_length=100)
     position = models.CharField(max_length=100)
 
@@ -36,7 +36,7 @@ class Task(models.Model):
         return self.titel
 
 class Subtask(models.Model):
-    titel = models.CharField(max_length=200)
+    content = models.CharField(max_length=200)
     checked = models.BooleanField()
     task = models.ForeignKey(Task, on_delete=models.CASCADE, related_name='subtasks')
 

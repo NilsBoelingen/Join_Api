@@ -19,15 +19,15 @@ class SubTaskViewSet(viewsets.ReadOnlyModelViewSet):
 
 class SummaryView(APIView):
     def get(self, request):
-        todo_count = Task.objects.filter(position='to-do').count()
-        in_progress_count = Task.objects.filter(position='in-progress').count()
-        done_count = Task.objects.filter(position='done').count()
-        feedback_count = Task.objects.filter(position='feedback').count()
-        urgent_count = Task.objects.filter(priority='urgent').count()
-        overdue_count = Task.objects.exclude(position='done').filter(due_date__gte=timezone.now().date()).count()
+        todo_count = Task.objects.filter(position='Todo').count()
+        in_progress_count = Task.objects.filter(position='InProgress').count()
+        done_count = Task.objects.filter(position='Done').count()
+        feedback_count = Task.objects.filter(position='AwaitFeedback').count()
+        urgent_count = Task.objects.filter(urgency='urgent').count()
+        overdue_count = Task.objects.exclude(position='done').filter(date__gte=timezone.now().date()).count()
         total_count = Task.objects.all().count()
-        next_task = Task.objects.filter(due_date__gte=timezone.now().date()).exclude(position='done').order_by('due_date').first()
-        next_deadline = next_task.due_date if next_task else 'None'
+        next_task = Task.objects.filter(date__gte=timezone.now().date()).exclude(position='done').exclude(urgency='low').exclude(urgency='medium').exclude(urgency='').order_by('date').first()
+        next_deadline = next_task.date if next_task else 'None'
 
         data = {
             'todo_count': todo_count,

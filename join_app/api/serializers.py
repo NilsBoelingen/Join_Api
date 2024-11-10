@@ -9,11 +9,12 @@ class UserSerializer(serializers.ModelSerializer):
 class SubTaskSerializer(serializers.ModelSerializer):
     class Meta:
         model = Subtask
-        fields = ['id', 'titel', 'checked']
+        fields = ['id', 'content', 'checked']
         read_only_fields = ['id']
 
 class TaskSerializer(serializers.ModelSerializer):
     subtasks = SubTaskSerializer(many=True, required=False)
+    contacts = serializers.PrimaryKeyRelatedField(queryset=Contact.objects.all(), required=False, many=True)
 
     class Meta:
         model = Task
@@ -21,11 +22,11 @@ class TaskSerializer(serializers.ModelSerializer):
 
     def create(self, validated_data):
         subtasks_data = validated_data.pop('subtasks', [])
-        users_data = validated_data.pop('users', [])
+        users_data = validated_data.pop('assignedTo', [])
         
         task = Task.objects.create(**validated_data)
         
-        task.users.set(users_data)
+        task.assignedTo.set(users_data)
         
         for subtask_data in subtasks_data:
             Subtask.objects.create(task=task, **subtask_data)
@@ -34,13 +35,13 @@ class TaskSerializer(serializers.ModelSerializer):
 
     def update(self, instance, validated_data):
         subtasks_data = validated_data.pop('subtasks', [])
-        users_data = validated_data.pop('users', [])
+        users_data = validated_data.pop('assignedTo', [])
         
         for attr, value in validated_data.items():
             setattr(instance, attr, value)
         instance.save()
         
-        instance.users.set(users_data)
+        instance.assignedTo.set(users_data)
         
         instance.subtasks.all().delete()
         for subtask_data in subtasks_data:
