@@ -45,3 +45,14 @@ class SummaryView(APIView):
 class ContactViewSet(viewsets.ModelViewSet):
     queryset = Contact.objects.all()
     serializer_class = ContactSerializer
+
+    def delete(self, request, *args, **kwargs):
+        instance = self.get_object()
+        tasks = Task.objects.all()
+        for task in tasks:
+            if instance in task.assignedTo.all():
+                task.assignedTo.remove(instance)
+                task.save()
+                
+        instance.delete()
+        return Response(status=status.HTTP_204_NO_CONTENT)
